@@ -14,11 +14,11 @@ const Navbar = () => {
   useEffect(() => {
     // Initialize Lenis smooth scroll
     lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.0,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      syncTouch: true,
-      touchMultiplier: 1.5,
+      syncTouch: false, // Let mobile run native GPU accelerated scroll
+      touchMultiplier: 1.0,
     });
 
     // Pause scroll initially until loading finishes
@@ -32,7 +32,7 @@ const Navbar = () => {
     };
     gsap.ticker.add(updateTicker);
 
-    gsap.ticker.lagSmoothing(0);
+    gsap.ticker.lagSmoothing(1000, 16); // Handle frame drops gracefully instead of disabling completely
 
     return () => {
       gsap.ticker.remove(updateTicker);
@@ -97,6 +97,11 @@ const Navbar = () => {
           <li>
             <a data-href="#code-activity" href="#code-activity" onClick={handleLinkClick}>
               <HoverLinks text="CODE ACTIVITY" />
+            </a>
+          </li>
+          <li>
+            <a data-href="#achievements" href="#achievements" onClick={handleLinkClick}>
+              <HoverLinks text="ACHIEVEMENTS" />
             </a>
           </li>
           <li>

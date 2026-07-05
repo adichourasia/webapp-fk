@@ -73,7 +73,7 @@ const CodeActivity = () => {
                 <div className="profile-details">
                   <div className="detail-row">
                     <span className="label">Repositories:</span>
-                    <span className="value text-highlight">6+</span>
+                    <span className="value text-highlight">16+</span>
                   </div>
                   <div className="detail-row">
                     <span className="label">Stars:</span>

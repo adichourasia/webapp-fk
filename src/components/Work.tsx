@@ -47,12 +47,12 @@ const Work = () => {
 
         // Stacking card parallax: scale down and fade preceding cards as next card scrolls over them
         // Only run on desktop screens where stacking is active (position: sticky)
-        if (nextCard && content && window.innerWidth > 1024) {
+        if (nextCard && content) {
           gsap.to(content, {
             scrollTrigger: {
               trigger: nextCard,
               start: "top 95%",
-              end: "top 120px",
+              end: "top calc(50vh - 250px)",
               scrub: true,
               invalidateOnRefresh: true,
             },
@@ -100,7 +100,7 @@ const Work = () => {
               className="work-card-pin"
               key={index}
               style={{
-                top: "120px",
+                top: "calc(50vh - 250px)",
                 zIndex: index + 1,
               }}
             >

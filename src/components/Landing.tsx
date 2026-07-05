@@ -66,7 +66,7 @@ const Landing = ({ children }: PropsWithChildren) => {
               </span>
             </div>
             <div className="cgpa-badge" data-cursor="disable">
-              CGPA: 9.02/10
+              CGPA: 9.04/10
             </div>
           </div>
         </div>

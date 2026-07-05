@@ -76,7 +76,7 @@ const TerminalWidget = () => {
         newHistory.push(
           "🎓 EDUCATION DETAILS:",
           "  - B.Tech in Computer Science & Engineering",
-          "    Amity University Chhattisgarh — Pursuing (CGPA: 9.02/10)",
+          "    Amity University Chhattisgarh — Pursuing (CGPA: 9.04/10)",
           "  - High Schooling & Primary Schooling",
           "    Pt. R.D. Tiwari Govt. English Medium School",
           "    Scores: 12th Grade (85%) | 10th Grade (92%)"
@@ -127,7 +127,7 @@ const TerminalWidget = () => {
       case "code activity":
         newHistory.push(
           "📊 GITHUB CODE STATS OVERVIEW:",
-          "  - Repositories : 6+",
+          "  - Repositories : 16+",
           "  - Stars        : 5",
           "  - Commits      : 500",
           "  - Followers    : 10"

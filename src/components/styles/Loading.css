@@ -54,8 +54,8 @@
   border-radius: 100px;
   background-color: #000;
   overflow: hidden;
-  transition: 0.8s ease-in-out;
-  transition-delay: 0.2s;
+  transition: 1.0s ease-in;
+  transition-delay: 0.1s;
   box-shadow: 0px 15px 15px 0px rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: center;
@@ -64,7 +64,7 @@
 
 .loading-clicked {
   transition-delay: 0ms;
-  transition-timing-function: cubic-bezier(0.33, 0.11, 1, 0.72);
+  transition-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
   transform: scale(1);
   min-width: calc(100vw + 5000px);
   border-radius: 5000px;
@@ -131,7 +131,7 @@
 
 .loading-clicked .loading-content2 {
   opacity: 0;
-  transition: 0.5s;
+  transition: 0.4s;
 }
 
 .loading-content span {

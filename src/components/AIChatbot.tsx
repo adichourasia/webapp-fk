@@ -47,7 +47,7 @@ const AIChatbot = () => {
 
     // Keyword matching rules
     if (cleanInput.includes("cgpa") || cleanInput.includes("grade") || cleanInput.includes("marks")) {
-      return "Aditya has an outstanding CGPA of **9.02/10** in his CSE B.Tech course.";
+      return "Aditya has an outstanding CGPA of **9.04/10** in his CSE B.Tech course.";
     }
 
     if (
@@ -105,7 +105,7 @@ const AIChatbot = () => {
       cleanInput.includes("star") ||
       cleanInput.includes("followers")
     ) {
-      return "Aditya's GitHub code stats:\n\n- **Repositories:** 6+\n- **Total Stars:** 5\n- **Commits:** 500\n- **Followers:** 10";
+      return "Aditya's GitHub code stats:\n\n- **Repositories:** 16+\n- **Total Stars:** 5\n- **Commits:** 500\n- **Followers:** 10";
     }
 
     if (

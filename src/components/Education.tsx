@@ -99,7 +99,7 @@ const Education = () => {
               <h5>Status & CGPA</h5>
               <div className="edu-tags-flex">
                 <div className="edu-tag">Pursuing</div>
-                <div className="edu-tag">CGPA: 9.02/10</div>
+                <div className="edu-tag">CGPA: 9.04/10</div>
                 <div className="edu-tag">CSE Major</div>
               </div>
               <div className="edu-arrow"></div>

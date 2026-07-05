@@ -1,0 +1,162 @@
+/* ── Achievements Section ── */
+.achievements-section {
+  position: relative;
+  width: 100%;
+  padding: 100px 0;
+  background-color: var(--backgroundColor);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.achievements-container {
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.achievements-header {
+  text-align: center;
+  max-width: 800px;
+  margin: 40px auto 25px;
+  padding: 0 20px;
+}
+
+.achievements-header h2 {
+  font-size: 70px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.achievements-header h2 span {
+  color: var(--accentColor);
+}
+
+.achievements-marquee-container {
+  width: 100%;
+  position: relative;
+  padding: 20px 0;
+}
+
+/* Custom hover pause in case react-fast-marquee prop struggles */
+.achievements-marquee-container:hover .rfm-marquee,
+.achievements-marquee-container:hover .rfm-child,
+.achievements-marquee-container:hover .rfm-initial-child-container {
+  animation-play-state: paused !important;
+}
+
+/* ── Certificate Cards (Vertical Card Orientation inside Horizontal Marquee) ── */
+.certificate-card {
+  width: 40vw;
+  max-width: 600px;
+  min-width: 320px;
+  margin: 0 2vw;
+  background: rgba(18, 18, 22, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.4s, box-shadow 0.4s;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.certificate-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(255, 199, 3, 0.4);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 199, 3, 0.15);
+}
+
+.certificate-img-wrapper {
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background-color: #0c0c0e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.certificate-img-wrapper img {
+  width: 100%;
+  height: auto;
+  max-height: 480px;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.certificate-card:hover .certificate-img-wrapper img {
+  transform: scale(1.04);
+}
+
+.certificate-img-wrapper.rotate-left {
+  width: 100%;
+  height: calc((40vw - 32px) * 0.68);
+  max-height: 380px;
+  min-height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.certificate-img-wrapper.rotate-left img {
+  transform: rotate(-90deg);
+  width: auto;
+  height: calc(40vw - 32px);
+  max-width: none;
+  max-height: 560px;
+  object-fit: contain;
+}
+
+.certificate-card:hover .certificate-img-wrapper.rotate-left img {
+  transform: rotate(-90deg) scale(1.04);
+}
+
+/* ── Responsive ── */
+@media only screen and (max-width: 1400px) {
+  .achievements-header h2 {
+    font-size: 50px;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .achievements-section {
+    padding: 60px 0;
+  }
+  
+  .achievements-header h2 {
+    font-size: 40px;
+  }
+  
+  .achievements-header p {
+    font-size: 15px;
+  }
+
+  .certificate-card {
+    width: 280px;
+  }
+  
+  .certificate-img-wrapper {
+    height: auto;
+  }
+
+  .certificate-img-wrapper.rotate-left {
+    height: 168px;
+    min-height: auto;
+    max-height: none;
+  }
+
+  .certificate-img-wrapper.rotate-left img {
+    height: 248px;
+    max-height: none;
+  }
+}
