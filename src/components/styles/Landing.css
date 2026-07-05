@@ -335,6 +335,8 @@ h2.landing-info-h2 {
     bottom: 0;
     z-index: 11;
     position: fixed;
+    left: 0;
+    transform: none;
   }
 
   .character-model::after,

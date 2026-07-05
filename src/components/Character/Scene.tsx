@@ -21,8 +21,15 @@ const Scene = () => {
 
   useEffect(() => {
     let resizeListenerRef: (() => void) | null = null;
-    if (canvasDiv.current) {
-      let rect = canvasDiv.current.getBoundingClientRect();
+    // Guard against StrictMode double-invoke: if cleanup runs before the async
+    // loadCharacter() resolves, isCancelled=true prevents the stale callback
+    // from adding a second character object to the shared scene.
+    let isCancelled = false;
+
+    // Capture the node locally so cleanup works even after React nulls canvasDiv.current
+    const canvasContainer = canvasDiv.current;
+    if (canvasContainer) {
+      let rect = canvasContainer.getBoundingClientRect();
       let container = { width: rect.width, height: rect.height };
       const aspect = container.width / container.height;
       const scene = sceneRef.current;
@@ -35,7 +42,7 @@ const Scene = () => {
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1;
-      canvasDiv.current.appendChild(renderer.domElement);
+      canvasContainer.appendChild(renderer.domElement);
 
       const camera = new THREE.PerspectiveCamera(14.5, aspect, 0.1, 1000);
       camera.position.z = 10;
@@ -54,25 +61,30 @@ const Scene = () => {
       const { loadCharacter } = setCharacter(renderer, scene, camera);
 
       loadCharacter().then((gltf) => {
-        if (gltf) {
-          const animations = setAnimations(gltf);
-          hoverDivRef.current && animations.hover(gltf, hoverDivRef.current);
-          mixer = animations.mixer;
-          let character = gltf.scene;
-          scene.add(character);
-          headBone = character.getObjectByName("spine006") || null;
-          screenLight = character.getObjectByName("screenlight") || null;
-          progress.loaded().then(() => {
-            setTimeout(() => {
-              light.turnOnLights();
-              animations.startIntro();
-            }, 2500);
-          });
-          let onResize = () => handleResize(renderer, camera, canvasDiv, character);
-          window.addEventListener("resize", onResize);
-          // Save a ref to the listener for cleanup
-          resizeListenerRef = onResize;
-        }
+        // If cleanup already ran (StrictMode double-invoke), bail out —
+        // do NOT add anything to the scene or set up listeners.
+        if (isCancelled || !gltf) return;
+
+        const animations = setAnimations(gltf);
+        hoverDivRef.current && animations.hover(gltf, hoverDivRef.current);
+        mixer = animations.mixer;
+        let character = gltf.scene;
+        // Clear any ghost objects before adding the real character
+        scene.clear();
+        scene.add(character);
+        headBone = character.getObjectByName("spine006") || null;
+        screenLight = character.getObjectByName("screenlight") || null;
+        progress.loaded().then(() => {
+          if (isCancelled) return;
+          setTimeout(() => {
+            light.turnOnLights();
+            animations.startIntro();
+          }, 2500);
+        });
+        let onResize = () => handleResize(renderer, camera, canvasDiv, character);
+        window.addEventListener("resize", onResize);
+        // Save a ref to the listener for cleanup
+        resizeListenerRef = onResize;
       });
 
       let mouse = { x: 0, y: 0 },
@@ -113,9 +125,7 @@ const Scene = () => {
         },
         { threshold: 0 }
       );
-      if (canvasDiv.current) {
-        observer.observe(canvasDiv.current);
-      }
+      observer.observe(canvasContainer);
 
       const animate = () => {
         requestAnimationFrame(animate);
@@ -142,6 +152,8 @@ const Scene = () => {
       animate();
 
       return () => {
+        // Signal all pending async callbacks to abort
+        isCancelled = true;
         clearTimeout(debounce);
         scene.clear();
         renderer.dispose();
@@ -149,8 +161,9 @@ const Scene = () => {
         if (resizeListenerRef) {
           window.removeEventListener("resize", resizeListenerRef);
         }
-        if (canvasDiv.current) {
-          canvasDiv.current.removeChild(renderer.domElement);
+        // Use locally-captured node — canvasDiv.current is nulled by React before cleanup
+        if (canvasContainer && renderer.domElement.parentNode === canvasContainer) {
+          canvasContainer.removeChild(renderer.domElement);
         }
         if (landingDiv) {
           document.removeEventListener("mousemove", onMouseMove);
