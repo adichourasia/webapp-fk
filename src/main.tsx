@@ -8,13 +8,19 @@ const isExtensionError = (message: string | undefined | null) => {
   if (!message) return false;
   return (
     message.includes("A listener indicated an asynchronous response") ||
-    message.includes("message channel closed before a response")
+    message.includes("message channel closed before a response") ||
+    message.includes("chrome-extension://") ||
+    message.includes("extensions::")
   );
 };
 
 window.addEventListener("unhandledrejection", (event) => {
   const reason = event.reason;
-  const msg = reason?.message || (typeof reason === "string" ? reason : "");
+  const msg =
+    reason?.message ||
+    reason?.stack ||
+    (typeof reason === "string" ? reason : "") ||
+    String(reason);
   if (isExtensionError(msg)) {
     event.preventDefault();
     event.stopPropagation();
@@ -22,33 +28,47 @@ window.addEventListener("unhandledrejection", (event) => {
 });
 
 window.addEventListener("error", (event) => {
-  const msg = event.message || event.error?.message;
+  const msg =
+    event.message ||
+    event.error?.message ||
+    event.error?.stack ||
+    String(event.error);
   if (isExtensionError(msg)) {
     event.preventDefault();
     event.stopPropagation();
   }
 });
 
+// Shared AudioContext for resource reuse and mobile compatibility
+let sharedAudioCtx: AudioContext | null = null;
+
 // Synthesize a mechanical click sound using Web Audio API
 const playClickSound = () => {
   try {
-    const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
+    if (!sharedAudioCtx) {
+      sharedAudioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    }
+    // Resume context if suspended (common mobile/safari gesture policy)
+    if (sharedAudioCtx.state === "suspended") {
+      sharedAudioCtx.resume();
+    }
+
+    const osc = sharedAudioCtx.createOscillator();
+    const gain = sharedAudioCtx.createGain();
 
     osc.type = "sine";
     // A quick frequency sweep makes a crisp, mechanical select click
-    osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.08);
+    osc.frequency.setValueAtTime(800, sharedAudioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(120, sharedAudioCtx.currentTime + 0.08);
 
-    gain.gain.setValueAtTime(0.06, audioCtx.currentTime); // Subtle volume
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+    gain.gain.setValueAtTime(0.06, sharedAudioCtx.currentTime); // Subtle volume
+    gain.gain.exponentialRampToValueAtTime(0.001, sharedAudioCtx.currentTime + 0.08);
 
     osc.connect(gain);
-    gain.connect(audioCtx.destination);
+    gain.connect(sharedAudioCtx.destination);
 
     osc.start();
-    osc.stop(audioCtx.currentTime + 0.08);
+    osc.stop(sharedAudioCtx.currentTime + 0.08);
   } catch (e) {
     console.warn("AudioContext failed to initialize:", e);
   }
@@ -60,13 +80,22 @@ window.addEventListener("click", (e) => {
   if (
     target.closest("button") ||
     target.closest("a") ||
+    target.closest("input") ||
+    target.closest("textarea") ||
     target.closest('[role="button"]') ||
+    target.closest('[data-cursor="disable"]') ||
     target.closest(".carousel-dot") ||
     target.closest(".connect-card") ||
     target.closest(".skill-card") ||
+    target.closest(".skill-logo-card") ||
     target.closest(".terminal-trigger") ||
     target.closest(".chatbot-trigger") ||
-    target.closest(".suggestion-btn")
+    target.closest(".suggestion-btn") ||
+    target.closest(".certificate-card") ||
+    target.closest(".loading-wrap") ||
+    target.closest(".loading-button") ||
+    target.closest(".loading-box") ||
+    target.closest(".work-card-content")
   ) {
     playClickSound();
   }

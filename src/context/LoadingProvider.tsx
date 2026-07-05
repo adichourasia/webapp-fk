@@ -6,6 +6,8 @@ import {
   useState,
 } from "react";
 import Loading from "../components/Loading";
+import TerminalWidget from "../components/TerminalWidget";
+import AIChatbot from "../components/AIChatbot";
 
 interface LoadingType {
   isLoading: boolean;
@@ -30,6 +32,8 @@ export const LoadingProvider = ({ children }: PropsWithChildren) => {
     <LoadingContext.Provider value={value as LoadingType}>
       {isLoading && <Loading percent={loading} />}
       <main className="main-body">{children}</main>
+      {!isLoading && <TerminalWidget />}
+      {!isLoading && <AIChatbot />}
     </LoadingContext.Provider>
   );
 };

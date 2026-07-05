@@ -11,14 +11,9 @@ import Work from "./Work";
 import TechnicalClubs from "./TechnicalClubs";
 import CodeActivity from "./CodeActivity";
 import Achievements from "./Achievements";
-import AIChatbot from "./AIChatbot";
-import TerminalWidget from "./TerminalWidget";
 import setSplitText from "./utils/splitText";
 
-import { useLoading } from "../context/LoadingProvider";
-
 const MainContainer = ({ children }: PropsWithChildren) => {
-  const { isLoading } = useLoading();
   const [isDesktopView, setIsDesktopView] = useState<boolean>(
     window.innerWidth > 1024
   );
@@ -40,8 +35,6 @@ const MainContainer = ({ children }: PropsWithChildren) => {
       <Cursor />
       <Navbar />
       <SocialIcons />
-      {!isLoading && <TerminalWidget />}
-      {!isLoading && <AIChatbot />}
       {isDesktopView && children}
       <div id="smooth-wrapper">
         <div id="smooth-content">
