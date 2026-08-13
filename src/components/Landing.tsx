@@ -22,7 +22,7 @@ const Landing = ({ children }: PropsWithChildren) => {
   const handleDownloadResume = async (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     try {
-      const response = await fetch("/Aditya%20Chourasia%20Resume_20260608_230455_0000.pdf");
+      const response = await fetch("/Resume%20Final.pdf");
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -34,7 +34,7 @@ const Landing = ({ children }: PropsWithChildren) => {
       window.URL.revokeObjectURL(url);
     } catch (err) {
       console.error("Blob download failed, falling back to open:", err);
-      window.open("/Aditya%20Chourasia%20Resume_20260608_230455_0000.pdf", "_blank");
+      window.open("/Resume%20Final.pdf", "_blank");
     }
   };
 
@@ -51,7 +51,7 @@ const Landing = ({ children }: PropsWithChildren) => {
             </h1>
             <a
               className="download-resume-btn"
-              href="/Aditya%20Chourasia%20Resume_20260608_230455_0000.pdf"
+              href="/Resume%20Final.pdf"
               onClick={handleDownloadResume}
               data-cursor="disable"
             >
